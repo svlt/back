@@ -1,0 +1,14 @@
+{
+    "name": "svlt/back",
+    "require-dev": {
+    },
+    "require": {
+        "usmanhalalit/pixie": "1.*@dev"
+        },
+    "authors": [
+        {
+            "name": "Alan Hardman",
+            "email": "alan@vault.im"
+        }
+    ]
+}
