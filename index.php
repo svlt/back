@@ -1,26 +1,11 @@
 <?php
-/**
- * Primary front controller/router
- *
- * @package  svlt/back
- */
-
-require_once 'mu/mu.php';
 require_once 'vendor/autoload.php';
+use Klein\Klein;
 
-$response = (new µ)
-	->get('/ping', function ($app) {
-		return 'Pong!';
-	})
-	->run();
+$k = new Klein();
 
-if(!is_array($response)) {
-	$response = array(
-		"status" => 200,
-		"error" => null,
-		"message" => $response,
-	);
-}
+$k->respond('GET', '/ping', function ($request, $response, $service) {
+	$response->json('Pong!');
+});
 
-header('Content-type: application/json');
-echo json_encode($response);
+$k->dispatch();

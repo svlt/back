@@ -3,7 +3,8 @@
     "require-dev": {
     },
     "require": {
-        "usmanhalalit/pixie": "1.*@dev"
+        "usmanhalalit/pixie": "1.*@dev",
+        "klein/klein": "^2.1"
         },
     "authors": [
         {
