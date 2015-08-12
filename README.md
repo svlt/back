@@ -1,9 +1,9 @@
 # svlt/back
 
-*This is the backend API for svlt*
+*This is the backend API for Social Vault*
 
 ## Installation
-Run the following git and Composer commands to install dependencies:
+Install [Composer](https://getcomposer.org/), then run:
 
-    git submodule update --init
     composer install
+
