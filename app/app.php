@@ -34,7 +34,7 @@ final class App {
 
 	/**
 	 * Automatically load classes when required
-	 * @param  string $class [description]
+	 * @param string $class
 	 */
 	static function autoload($class) {
 		$filename = strtolower(str_replace('\\', '/', $class)) . '.php';
@@ -45,7 +45,7 @@ final class App {
 
 	/**
 	 * Get a router instance
-	 * @return Klein
+	 * @return Klein\Klein
 	 */
 	static function router() {
 		if(!self::$_router) {
@@ -55,10 +55,30 @@ final class App {
 	}
 
 	/**
+	 * Trigger router error
+	 * @param int $code
+	 */
+	static function error($code = null) {
+		return self::router()->abort($code);
+	}
+
+	/**
 	 * Get a query builder instance
+	 * @return Pixie\Connection
 	 */
 	static function db() {
 		return self::$_db;
+	}
+
+	/**
+	 * Get a model instance
+	 * @param  string $name
+	 * @return Model
+	 */
+	static function model($name, $args = array()) {
+		$className = 'Model\\' . str_replace('/', '\\', ucwords($name));
+		$class = new ReflectionClass($className);
+		return $class->newInstanceArgs($args);
 	}
 
 }
