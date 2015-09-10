@@ -37,6 +37,7 @@ Next, create `/etc/nginx/sites-available/sv-back` with these contents:
         index index.html index.php;
 
         location / {
+            add_header 'Access-Control-Allow-Origin' '*';
             try_files $uri $uri/ /index.php?$args;
         }
 
@@ -46,3 +47,4 @@ Next, create `/etc/nginx/sites-available/sv-back` with these contents:
 Finally, restart nginx:
 
     sudo service nginx restart
+
