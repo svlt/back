@@ -7,6 +7,8 @@ Install [Composer](https://getcomposer.org/), then run:
 
     composer install
 
+Copy the `config-sample.php` file to `config.php` and fill in your database connection information.
+
 ## Deployment
 
 ### Ubuntu 14.04 LTS
