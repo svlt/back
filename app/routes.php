@@ -1,25 +1,24 @@
 <?php
-use Klein\Klein as Router;
 
-$k = new Router();
+$router = App::router();
 
 // Root
-$k->respond('GET', '/', function($request, $response, $service) {
+$router->respond('GET', '/', function($request, $response, $service) {
 	$response->json(array('message' => 'This is the svlt/back base route.'));
 });
 
 // Users
-$k->with('/u/[a:username]', function() use($k) {
+$router->with('/u/[a:username]', function() use($router) {
 
 	// User basic info
-	$k->respond('GET', '/?', function($request, $response, $service) use($k) {
+	$router->respond('GET', '/?', function($request, $response, $service) use($router) {
 
 		// Load user
 		$user = QB::table('user')
 				->select(array('username', 'name', 'fingerprint'))
 				->find($request->username, 'username');
 		if(!$user) {
-			$k->abort(404);
+			$router->abort(404);
 		}
 
 		$response->json($user);
@@ -27,33 +26,33 @@ $k->with('/u/[a:username]', function() use($k) {
 	});
 
 	// User public key
-	$k->respond('GET', '/key/?', function($request, $response, $service) use($k) {
+	$router->respond('GET', '/key/?', function($request, $response, $service) use($router) {
 
 		// Load user
 		$user = QB::table('user')->find($request->username, 'username');
 		if(!$user) {
-			$k->abort(404);
+			$router->abort(404);
 		}
 
-		$key = QB::table('user_key')
+		$routerey = QB::table('user_key')
 				->select(array('fingerprint', 'key'))
 				->where('type', 'public')
 				->where('user_id', $user->id)
 				->first();
 
-		$response->json($key);
+		$response->json($routerey);
 
 	});
 
 });
 
 // Ping
-$k->respond('GET', '/ping', function($request, $response, $service) {
+$router->respond('GET', '/ping', function($request, $response, $service) {
 	$response->noCache()->json('Pong!');
 });
 
 // Handle errors
-$k->onHttpError(function ($code, $router) {
+$router->onHttpError(function ($code, $router) {
 	switch($code) {
 		case 404:
 			$router->response()->json(array(
@@ -68,4 +67,4 @@ $k->onHttpError(function ($code, $router) {
 	}
 });
 
-$k->dispatch();
+$router->dispatch();
