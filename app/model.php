@@ -2,7 +2,7 @@
 
 abstract class Model implements ArrayAccess {
 
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Get the database table name for the model

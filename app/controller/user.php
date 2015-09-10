@@ -13,7 +13,7 @@ class User extends \Controller {
 	public function base($request, $response, $service) {
 
 		$user = \QB::table('user')
-				->select(array('username', 'name', 'fingerprint'))
+				->select(['username', 'name', 'fingerprint'])
 				->find($request->username, 'username');
 
 		if(!$user) {
@@ -33,7 +33,7 @@ class User extends \Controller {
 	public function key($request, $response, $service) {
 
 		$key = \QB::table('user_key')
-				->select(array('user_key.fingerprint', 'user_key.key'))
+				->select(['user_key.fingerprint', 'user_key.key'])
 				->join('user', 'user.id', '=', 'user_key.user_id')
 				->where('user.username', $request->username)
 				->where('user_key.type', 'public')
@@ -56,7 +56,7 @@ class User extends \Controller {
 	public function posts($request, $response, $service) {
 
 		$query = \QB::table('post')
-				->select(array('post.*'))
+				->select(['post.*'])
 				->join('user', 'user.id', '=', 'post.user_id')
 				->where('user.username', $request->username);
 

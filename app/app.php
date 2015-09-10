@@ -12,7 +12,7 @@ final class App {
 	static function init() {
 
 		// Register autoload function
-		spl_autoload_register(array('App', 'autoload'), true, true);
+		spl_autoload_register(['App', 'autoload'], true, true);
 
 		// Load configuration
 		if(is_file('config.php')) {
@@ -25,7 +25,7 @@ final class App {
 		require_once 'vendor/autoload.php';
 
 		// Initialize database connection
-		$db = new Pixie\Connection('mysql', array('driver' => 'mysql') + $config['db'], 'QB');
+		$db = new Pixie\Connection('mysql', ['driver' => 'mysql'] + $config['db'], 'QB');
 
 		// Initialize routes
 		require_once 'routes.php';
@@ -75,7 +75,7 @@ final class App {
 	 * @param  string $name
 	 * @return Model
 	 */
-	static function model($name, $args = array()) {
+	static function model($name, $args = []) {
 		$className = 'Model\\' . str_replace('/', '\\', ucwords($name));
 		$class = new ReflectionClass($className);
 		return $class->newInstanceArgs($args);
