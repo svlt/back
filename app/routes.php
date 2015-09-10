@@ -3,19 +3,20 @@
 $router = App::router();
 
 // Root
-$router->respond('GET', '/', function($request, $response, $service) {
+$router->get('/', function($request, $response, $service) {
 	$response->json(array('message' => 'This is the svlt/back base route.'));
 });
 
 // Ping
-$router->respond('GET', '/ping', function($request, $response, $service) {
+$router->get('/ping', function($request, $response, $service) {
 	$response->noCache()->json('Pong!');
 });
 
 // Users
 $router->with('/u/[a:username]', function() use($router) {
-	$router->respond('GET', '.json', array('Controller\\User', 'base'));
-	$router->respond('GET', '/key.json', array('Controller\\User', 'key'));
+	$router->get('.json', array('Controller\\User', 'base'));
+	$router->get('/key.json', array('Controller\\User', 'key'));
+	$router->get('/posts.json', array('Controller\\User', 'posts'));
 });
 
 // Handle errors
