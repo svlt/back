@@ -19,6 +19,12 @@ $router->with('/u/[a:username]', function() use($router) {
 	$router->get('/posts.json', ['Controller\\User', 'posts']);
 });
 
+// Posts
+$router->with('/post', function() use($router) {
+	$router->post('.json', ['Controller\\Post', 'post']);
+	$router->get('/[i:id].json', ['Controller\\Post', 'single']);
+});
+
 // Handle errors
 $router->onHttpError(function ($code, $router) {
 	switch($code) {
