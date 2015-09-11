@@ -12,15 +12,13 @@ class User extends \Controller {
 	 */
 	public function base($request, $response, $service) {
 
-		$user = \QB::table('user')
-				->select(['username', 'name', 'fingerprint'])
-				->find($request->username, 'username');
+		$user = \App::model('user')->load($request->username, 'username');
 
-		if(!$user) {
-			App::error(404);
+		if(!$user->get('id')) {
+			\App::error(404);
 		}
 
-		$response->json($user);
+		$response->json($user->getFields(['username', 'name', 'fingerprint']));
 
 	}
 
@@ -40,7 +38,7 @@ class User extends \Controller {
 				->first();
 
 		if(!$key) {
-			App::error(404);
+			\App::error(404);
 		}
 
 		$response->json($key);
@@ -49,7 +47,7 @@ class User extends \Controller {
 
 	/**
 	 * /u/@user/posts.json
-	 * @param  Pixfie\Request $request
+	 * @param  Pixie\Request $request
 	 * @param  Pixie\AbstractResponse $response
 	 * @param  Pixie\ServiceProvider  $service
 	 */
@@ -70,7 +68,7 @@ class User extends \Controller {
 		$posts = $query->get();
 
 		if(!$posts) {
-			App::error(404);
+			\App::error(404);
 		}
 
 		$response->json($posts);
