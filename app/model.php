@@ -21,7 +21,7 @@ abstract class Model {
 	 * @param  string $field
 	 * @return Model
 	 */
-	public function load($value, $field = null) {
+	public function load($value, $field = 'id') {
 		$data = QB::table($this->getTableName())->find($value, $field);
 		if($data) {
 			$this->_id = $data->id;
