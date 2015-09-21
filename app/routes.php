@@ -4,11 +4,13 @@ $router = App::router();
 
 // Root
 $router->get('/', function($request, $response, $service) {
-	$response->json(['message' => 'This is the svlt/back base route.']);
+	$response->json([
+		'message' => 'This is the Social Vault API. Documentation is available at https://svlt.github.io/.',
+	]);
 });
 
 // Ping
-$router->get('/ping', function($request, $response, $service) {
+$router->get('/ping.json', function($request, $response, $service) {
 	$response->noCache()->json('Pong!');
 });
 
@@ -17,7 +19,9 @@ $router->with('/u/[a:username]', function() use($router) {
 	$router->get('.json', ['Controller\\User', 'base']);
 	$router->get('/key.json', ['Controller\\User', 'key']);
 	$router->get('/posts.json', ['Controller\\User', 'posts']);
+	$router->post('/posts.json', ['Controller\\User', 'post']);
 });
+$router->post('/register.json', ['Controller\\User', 'register']);
 
 // Posts
 $router->with('/post', function() use($router) {
@@ -31,6 +35,13 @@ $router->onHttpError(function ($code, $router) {
 		case 404:
 			$router->response()->json([
 				'error' => 'HTTP/1.1 404 Not Found',
+				'path' => $router->request()->pathname(),
+			]);
+			break;
+		case 401:
+			$router->response()->json([
+				'error' => 'HTTP/1.1 401 Unauthorized',
+				'message' => 'Supply a valid `token` value to avoid this error.',
 				'path' => $router->request()->pathname(),
 			]);
 			break;

@@ -76,7 +76,7 @@ final class App {
 	 * @return Model
 	 */
 	static function model($name, $args = []) {
-		$className = 'Model\\' . str_replace('/', '\\', ucwords($name));
+		$className = 'Model\\' . str_replace(array('/', '_'), '\\', ucwords($name));
 		$class = new ReflectionClass($className);
 		return $class->newInstanceArgs($args);
 	}

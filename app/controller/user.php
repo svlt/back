@@ -75,4 +75,44 @@ class User extends \Controller {
 
 	}
 
+	/**
+	 * POST /u/@user/posts.json
+	 * @param  Pixie\Request $request
+	 * @param  Pixie\AbstractResponse $response
+	 * @param  Pixie\ServiceProvider  $service
+	 */
+	public function post($request, $response, $service) {
+		$userId = self::_requireAuth();
+		if(!$userId) {
+			\App::error(401);
+		}
+
+		$page = \App::model('user')->load($request->username, 'username');
+		if(!$page->get('id')) {
+			\App::error(404);
+		}
+
+		// TODO: Throw 403 if attempting to post to page that is not a buddy
+
+		// Create the post
+		$post = \App::model('post');
+		$post->set('page_id', $page->get('id'));
+		$post->set('user_id', $userId);
+		$post->set('content', $_POST['content']);
+		$post->save();
+
+		$response->json($post->data());
+
+	}
+
+	/**
+	 * POST /register.json
+	 * @param  Pixie\Request $request
+	 * @param  Pixie\AbstractResponse $response
+	 * @param  Pixie\ServiceProvider  $service
+	 */
+	public function register($request, $response, $service) {
+		// TODO: Implement user registration
+	}
+
 }

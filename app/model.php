@@ -12,7 +12,7 @@ abstract class Model {
 	 * @return string
 	 */
 	public function getTableName() {
-		return strtolower(trim(preg_replace('/^model/i', '', get_class($this)), '\\'));
+		return strtolower(str_replace('\\', '_', trim(preg_replace('/^model/i', '', get_class($this)), '\\')));
 	}
 
 	/**
@@ -54,9 +54,35 @@ abstract class Model {
 			$diff = array_diff_assoc($this->_data, $this->origData);
 			QB::table($this->getTableName())->where('id', '=', $this->_id)->update($diff);
 		} else {
+			if(empty($this->_data['created_at'])) {
+				$this->_data['created_at'] = date('Y-m-d');
+			}
 			QB::table($this->getTableName())->insert($this->_data);
 		}
 		$this->_origData = $this->_data;
+		return $this;
+	}
+
+	/**
+	 * Delete the current instance
+	 * @return Model
+	 */
+	public function delete() {
+		if($this->_id) {
+			QB::table($this->getTableName())->where('id', '=', $this->_id)->delete();
+		}
+		$this->reset();
+		return $this;
+	}
+
+	/**
+	 * Reset the current instance
+	 * @return Model
+	 */
+	public function reset() {
+		$this->_id = null;
+		$this->_origData = [];
+		$this->_data = [];
 		return $this;
 	}
 
