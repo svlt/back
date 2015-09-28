@@ -1,0 +1,6 @@
+{
+    "require": {
+        "bcosca/fatfree": "^3.5",
+        "usmanhalalit/pixie": "^1.0"
+    }
+}
