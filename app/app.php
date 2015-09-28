@@ -16,7 +16,7 @@ final class App {
 
 		// Load configuration
 		if(is_file('config.php')) {
-			$config = require('config.php');
+			self::$_config = require('config.php');
 		} else {
 			throw new Exception('No config.php file found.');
 		}
@@ -25,7 +25,7 @@ final class App {
 		require_once 'vendor/autoload.php';
 
 		// Initialize database connection
-		$db = new Pixie\Connection('mysql', ['driver' => 'mysql'] + $config['db'], 'QB');
+		self::$_db = new Pixie\Connection('mysql', ['driver' => 'mysql'] + self::$_config['db'], 'QB');
 
 		// Initialize routes
 		require_once 'routes.php';
