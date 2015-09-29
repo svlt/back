@@ -1,6 +1,6 @@
 # svlt/back
 
-*This is the backend API for Social Vault*
+*This is the backend API for Vault*
 
 ## Installation
 Install [Composer](https://getcomposer.org/), then run:

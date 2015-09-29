@@ -5,7 +5,7 @@ $router = App::router();
 // Root
 $router->get('/', function($request, $response, $service) {
 	$response->json([
-		'message' => 'This is the Social Vault API. Documentation is available at https://svlt.github.io/.',
+		'message' => 'This is the Vault API. Documentation is available at https://svlt.github.io/.',
 	]);
 });
 
