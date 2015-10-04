@@ -24,7 +24,7 @@ final class App {
 
 		// Initialize framework
 		self::$_router = Base::instance();
-		self::$_fw->mset([
+		self::$_router->mset([
 			'AUTOLOAD' => 'app/',
 			'ESCAPE' => false,
 			'PACKAGE' => 'svlt/back',
