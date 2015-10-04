@@ -24,7 +24,11 @@ final class App {
 
 		// Initialize framework
 		self::$_router = Base::instance();
-		self::$_router->set('AUTOLOAD', 'app/');
+		self::$_fw->mset([
+			'AUTOLOAD' => 'app/',
+			'ESCAPE' => false,
+			'PACKAGE' => 'svlt/back',
+		]);
 
 		// Initialize database connection and query builder
 		self::$_qb = new Pixie\Connection('mysql', ['driver' => 'mysql'] + self::$_config['db'], 'QB');
