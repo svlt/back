@@ -24,7 +24,6 @@ Start by cloning the repo into `/var/www/sv/back` and following the [Installatio
 
     sudo /usr/share/hhvm/install_fastcgi.sh
     sudo /etc/init.d/hhvm restart
-    sudo /etc/init.d/apache restart
     sudo update-rc.d hhvm defaults
 
 Next, create `/etc/nginx/sites-available/sv-back` with these contents:
