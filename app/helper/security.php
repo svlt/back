@@ -11,7 +11,7 @@ class Security {
 	 * @return string
 	 */
 	static function generateToken($user_id, $expires = null) {
-		$hash = self::sha512(self::randBytes());
+		$hash = self::randChars(128);
 		$token = \App::model('user/token');
 		$token->set('user_id', $user_id);
 		$token->set('expires_at', date('Y-m-d H:i:s', $expires ?: strtotime('+1 week')));
@@ -57,9 +57,13 @@ class Security {
 			return random_bytes($length);
 		}
 		if(function_exists('openssl_random_pseudo_bytes')) { // OpenSSL
-			return openssl_random_pseudo_bytes($length);
+			$result = openssl_random_pseudo_bytes($length, $strong);
+			if(!$strong) {
+				throw new Exception('OpenSSL failed to generate secure randomness.');
+			}
+			return $result;
 		}
-		if(file_exists('/dev/urandom')) { // Unix
+		if(file_exists('/dev/urandom') && is_readable('/dev/urandom')) { // Unix
 			$fh = fopen('/dev/urandom', 'rb');
 			if ($fh !== false) {
 				$result = fread($fh, $length);
@@ -68,6 +72,19 @@ class Security {
 			}
 		}
 		throw new Exception('No secure random source available.');
+	}
+
+	/**
+	 * Generate secure random printable characters
+	 * @param  int $length
+	 * @return string
+	 */
+	static function randChars($length = 64) {
+		$chars = '';
+		while(strlen($chars) < $length) {
+			$chars .= preg_replace('/[^a-zA-Z0-9~!@#$%^&*_-]/i', '', self::randBytes($length * 4));
+		}
+		return substr($chars, 0, $length);
 	}
 
 }
