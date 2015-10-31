@@ -14,7 +14,7 @@ class User extends \Controller {
 			\App::error(404);
 		}
 
-		$this->_json($user->getFields(['username', 'name', 'fingerprint']));
+		$this->_json($user->getFields(['username', 'tagline', 'name', 'fingerprint']));
 	}
 
 	/**
