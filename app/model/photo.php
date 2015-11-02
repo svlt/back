@@ -1,8 +1,8 @@
 <?php
 
-namespace Model\Post;
+namespace Model;
 
-class Comment extends \Model {
+class Photo extends \Model {
 
 	protected static $requiredFields = ['user_id', 'post_id', 'content', 'signature'];
 

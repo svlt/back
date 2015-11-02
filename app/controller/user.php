@@ -8,7 +8,12 @@ class User extends \Controller {
 	 * /u/@user.json
 	 */
 	public function base($f3, $params) {
-		$user = \App::model('user')->load(array('username = ?', $params['username']));
+		$user = \App::model('user');
+		if($params['username'] == 'me') {
+			$user->loadByToken($f3->get('GET._token'));
+		} else {
+			$user->load(array('username = ?', $params['username']));
+		}
 
 		if(!$user->get('id')) {
 			\App::error(404);
@@ -90,7 +95,63 @@ class User extends \Controller {
 	 * POST /register.json
 	 */
 	public function register($f3, $params) {
-		// TODO: Implement user registration
+		// Create user
+		$data = [
+			'username' => $f3->get('POST.username'),
+			'fingerprint' => $f3->get('POST.keypair-fingerprint'),
+			'name' => $f3->get('POST.name'),
+			'password_salt' => $f3->get('POST.password-salt'),
+			'password_hash' => $f3->get('POST.password-hash'),
+			'private_key' => $f3->get('POST.keypair-private'),
+			'public_key' => $f3->get('POST.keypair-public'),
+			'symmetric_key' => $f3->get('POST.symmkey'),
+		];
+		$user = \Model\User::create($data);
+
+		// Log in user and return stssion token
+		$token = \Helper\Security::generateToken($user->id);
+		$this->_json(['user_id' => $user->id, 'token' => $token]);
+	}
+
+	/**
+	 * POST /auth.json
+	 */
+	public function auth($f3) {
+		switch($f3->get('POST.action')) {
+			case 'salt':
+				$user = new \Model\User;
+				$user->load(['username = ?', $f3->get('POST.username')]);
+				if($user->id) {
+					$this->_json(['salt' => $user->password_salt]);
+				} else {
+					$this->_json(['salt' => null, 'error' => 'User does not exist.']);
+				}
+				break;
+			case 'auth':
+				$user = new \Model\User;
+				$user->load(['username = ? AND password_hash = ?', $f3->get('POST.username'), $f3->get('POST.password_hash')]);
+				if($user->id) {
+					$token = \Helper\Security::generateToken($user->id);
+					$this->_json(['user_id' => $user->id, 'token' => $token]);
+				} else {
+					$this->_json(['error' => 'Invalid username or password.']);
+				}
+				break;
+		}
+	}
+
+	/**
+	 * POST /logout.json
+	 */
+	public function logout($f3) {
+		$token = new \Model\User\Token;
+		$token->load(['token = ?', $f3->get('REQUEST._token')]);
+		if(!$token->id) {
+			$this->_json(['error' => 'Token not found.']);
+			return;
+		}
+		$token->erase();
+		$this->_json(['success' => true]);
 	}
 
 }

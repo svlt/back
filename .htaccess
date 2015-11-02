@@ -1,6 +1,8 @@
 # Enable rewrite engine and route requests to front controller
 RewriteEngine On
 
+Header set Access-Control-Allow-Origin "*"
+
 # RewriteBase /
 
 RewriteCond %{REQUEST_URI} app\/(controller|dict|helper|model|view)

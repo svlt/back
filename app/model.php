@@ -2,6 +2,8 @@
 
 abstract class Model extends \DB\SQL\Mapper {
 
+	protected static $requiredFields = [];
+
 	/**
 	 * Initialize model instance
 	 */
@@ -15,6 +17,40 @@ abstract class Model extends \DB\SQL\Mapper {
 	 */
 	public function getTableName() {
 		return strtolower(str_replace('\\', '_', trim(preg_replace('/^model/i', '', get_class($this)), '\\')));
+	}
+
+	/**
+	 * Create and save a new item
+	 * @param  array $data
+	 * @return Model
+	 */
+	public static function create(array $data) {
+		$item = new static();
+
+		// Check required fields
+		foreach(self::$requiredFields as $field) {
+			if(!isset($data[$field])) {
+				throw new Exception("Required field $field not specified.");
+			}
+		}
+
+		// Set field values
+		foreach($data as $key => $val) {
+			if($item->exists($key)) {
+				if(empty($val)) {
+					$val = null;
+				}
+				$item->set($key, $val);
+			}
+		}
+
+		// Set auto values if they exist
+		if($item->exists("created_at") && !isset($data["created_at"])) {
+			$item->set("created_at", date("Y-m-d H:i:s"));
+		}
+
+		$item->save();
+		return $item;
 	}
 
 	/**

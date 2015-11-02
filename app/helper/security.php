@@ -12,10 +12,11 @@ class Security {
 	 */
 	static function generateToken($user_id, $expires = null) {
 		$hash = self::randChars(128);
-		$token = \App::model('user/token');
-		$token->set('user_id', $user_id);
-		$token->set('expires_at', date('Y-m-d H:i:s', $expires ?: strtotime('+1 week')));
-		$token->set('token', $hash);
+		$token = \Model\User\Token::create([
+			'user_id' => $user_id,
+			'expires_at' => date('Y-m-d H:i:s', $expires ?: strtotime('+1 week')),
+			'token' => $hash
+		]);
 		$token->save();
 		return $hash;
 	}
