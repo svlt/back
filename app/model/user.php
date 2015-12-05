@@ -17,8 +17,8 @@ class User extends \Model {
 
 		// Create keys
 		$private = User\Key::create(['user_id' => $user->id, 'type' => 'private', 'fingerprint' => $data['fingerprint'], 'key' => $data['private_key']]);
-		$public = User\Key::create(['user_id' => $user->id, 'type' => 'private', 'fingerprint' => $data['fingerprint'], 'key' => $data['public_key']]);
-		$symmetric = User\Key::create(['user_id' => $user->id, 'type' => 'symmetric', 'key' => $data['symmetric_key']]);
+		$public = User\Key::create(['user_id' => $user->id, 'type' => 'public', 'fingerprint' => $data['fingerprint'], 'key' => $data['public_key']]);
+		$symmetric = User\Key::create(['user_id' => $user->id, 'buddy_id' => $user->id, 'type' => 'symmetric', 'key' => $data['symmetric_key']]);
 
 		return $user;
 	}
