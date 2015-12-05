@@ -11,7 +11,7 @@ class Security {
 	 * @return string
 	 */
 	static function generateToken($user_id, $expires = null) {
-		$hash = self::randChars(128);
+		$hash = self::randChars(128, true);
 		$token = \Model\User\Token::create([
 			'user_id' => $user_id,
 			'expires_at' => date('Y-m-d H:i:s', $expires ?: strtotime('+1 week')),
@@ -80,10 +80,15 @@ class Security {
 	 * @param  int $length
 	 * @return string
 	 */
-	static function randChars($length = 64) {
+	static function randChars($length = 64, $safe = false) {
+		if($safe) {
+			$allowedChars = 'a-z0-9_-';
+		} else {
+			$allowedChars = 'a-z0-9~!@#$%^&*_-';
+		}
 		$chars = '';
 		while(strlen($chars) < $length) {
-			$chars .= preg_replace('/[^a-zA-Z0-9~!@#$%^&*_-]/i', '', self::randBytes($length * 4));
+			$chars .= preg_replace("/[^$allowedChars]/i", '', self::randBytes($length * 4));
 		}
 		return substr($chars, 0, $length);
 	}
