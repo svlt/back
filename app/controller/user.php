@@ -144,9 +144,25 @@ class User extends \Controller {
 	 * GET /keystore.json
 	 */
 	public function keystore($f3) {
+		$userId = self::_requireAuth();
+		if(!$userId) {
+			\App::error(401);
+		}
+
 		$key = new \Model\User\Key;
-		$keys = $key->find(['user_id = ?', $user->id]);
-		$this->_json($keys->getFields(['buddy_id', 'type', 'fingerprint', 'key']));
+		$keys = $key->find(['user_id = ?', $userId]);
+		$return = ['symmetric' => []];
+		foreach($keys as $k) {
+			switch($k->type) {
+				case 'private':
+				case 'public':
+					$return[$k->type] = $k->key;
+					break;
+				default:
+					$return['symmetric'][$k->buddy_id] = $k->key;
+			}
+		}
+		$this->_json($return);
 	}
 
 	/**
