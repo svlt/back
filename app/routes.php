@@ -14,6 +14,7 @@ $router->route('POST /u/@username/posts.json', 'Controller\\User->post');
 $router->route('POST /register.json', 'Controller\\User->register');
 $router->route('POST /auth.json', 'Controller\\User->auth');
 $router->route('POST /logout.json', 'Controller\\User->logout');
+$router->route('GET /keystore.json', 'Controller\\User->keystore');
 
 // Posts
 $router->route('GET /post.json', 'Controller\\Post->post');

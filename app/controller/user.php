@@ -141,6 +141,15 @@ class User extends \Controller {
 	}
 
 	/**
+	 * GET /keystore.json
+	 */
+	public function keystore($f3) {
+		$key = new \Model\User\Key;
+		$keys = $key->find(['user_id = ?', $user->id]);
+		$this->_json($keys->getFields(['buddy_id', 'type', 'fingerprint', 'key']));
+	}
+
+	/**
 	 * POST /logout.json
 	 */
 	public function logout($f3) {
