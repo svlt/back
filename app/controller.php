@@ -7,7 +7,7 @@ abstract class Controller {
 	 * @return int|bool FALSE or a User ID
 	 */
 	protected function _requireAuth() {
-		$token = isset($_REQUEST['token']) ? $_REQUEST['token'] : (isset($_SERVER['HTTP_TOKEN']) ? $_SERVER['HTTP_TOKEN'] : null);
+		$token = isset($_REQUEST['_token']) ? $_REQUEST['_token'] : (isset($_SERVER['HTTP_TOKEN']) ? $_SERVER['HTTP_TOKEN'] : null);
 		return $token ? \Helper\Security::validateToken($token) : false;
 	}
 

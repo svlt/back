@@ -28,7 +28,7 @@ class Security {
 	 */
 	static function validateToken($tokenString) {
 		$token = \App::model('user/token');
-		$token->load($tokenString, 'token');
+		$token->load(['token = ?', $tokenString]);
 		if($token->get('id')) {
 			if(strtotime($token->get('expires_at')) > time()) {
 				return $token->get('user_id');
