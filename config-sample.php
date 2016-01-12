@@ -6,5 +6,8 @@ return [
         "username" => "root",
         "password" => "",
         "database" => "svlt",
-    ]
+    ],
+	"security" => [
+		"bcrypt_cost" => 12,
+	],
 ];

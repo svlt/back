@@ -101,7 +101,7 @@ class User extends \Controller {
 			'fingerprint' => $f3->get('POST.keypair-fingerprint'),
 			'name' => $f3->get('POST.name'),
 			'password_salt' => $f3->get('POST.password-salt'),
-			'password_hash' => password_hash($f3->get('POST.password-hash'), PASSWORD_DEFAULT),
+			'password_hash' => password_hash($f3->get('POST.password-hash'), PASSWORD_DEFAULT, ['cost' => \App::config()['security']['bcrypt_cost']]),
 			'private_key' => $f3->get('POST.keypair-private'),
 			'public_key' => $f3->get('POST.keypair-public'),
 			'symmetric_key' => $f3->get('POST.symmkey'),
@@ -128,11 +128,21 @@ class User extends \Controller {
 				}
 				break;
 			case 'auth':
+				// Verify login
 				$user = new \Model\User;
 				$user->load(['username = ?', $f3->get('POST.username')]);
 				if($user->id && password_verify($f3->get('POST.password_hash'), $user->password_hash)) {
+
+					// Re-hash passphrase if it doesn't meet the current security settings
+					if(password_needs_rehash($user->password_hash, PASSWORD_DEFAULT, ['cost' => \App::config()['security']['bcrypt_cost']])) {
+						$user->password_hash = password_hash($f3->get('POST.password_hash'), PASSWORD_DEFAULT, ['cost' => \App::config()['security']['bcrypt_cost']]);
+						$user->save();
+					}
+
+					// Generate and return session token
 					$token = \Helper\Security::generateToken($user->id);
 					$this->_json(['user_id' => $user->id, 'token' => $token]);
+
 				} else {
 					$this->_json(['error' => 'Invalid username or password.']);
 				}

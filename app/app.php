@@ -59,6 +59,14 @@ final class App {
 	}
 
 	/**
+	 * Get app configuration
+	 * @return array
+	 */
+	static function config() {
+		return self::$_config;
+	}
+
+	/**
 	 * Trigger router error
 	 * @param int $code
 	 */

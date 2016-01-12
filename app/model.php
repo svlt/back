@@ -75,7 +75,12 @@ abstract class Model extends \DB\SQL\Mapper {
 	 */
 	public function data(array $data = null) {
 		if($data === null) {
-			return $this->fields();
+			$return = [];
+			$fields = $this->fields();
+			foreach($fields as $f) {
+				$return[$f] = $this->get($f);
+			}
+			return $return;
 		} else {
 			foreach($data as $key=>$val) {
 				$this->set($key, $val);
