@@ -101,7 +101,7 @@ class User extends \Controller {
 			'fingerprint' => $f3->get('POST.keypair-fingerprint'),
 			'name' => $f3->get('POST.name'),
 			'password_salt' => $f3->get('POST.password-salt'),
-			'password_hash' => $f3->get('POST.password-hash'),
+			'password_hash' => password_hash($f3->get('POST.password-hash'), PASSWORD_DEFAULT),
 			'private_key' => $f3->get('POST.keypair-private'),
 			'public_key' => $f3->get('POST.keypair-public'),
 			'symmetric_key' => $f3->get('POST.symmkey'),
@@ -129,8 +129,8 @@ class User extends \Controller {
 				break;
 			case 'auth':
 				$user = new \Model\User;
-				$user->load(['username = ? AND password_hash = ?', $f3->get('POST.username'), $f3->get('POST.password_hash')]);
-				if($user->id) {
+				$user->load(['username = ?', $f3->get('POST.username')]);
+				if($user->id && password_verify($f3->get('POST.password_hash'), $user->password_hash)) {
 					$token = \Helper\Security::generateToken($user->id);
 					$this->_json(['user_id' => $user->id, 'token' => $token]);
 				} else {
