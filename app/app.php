@@ -59,6 +59,13 @@ final class App {
 	}
 
 	/**
+	 * Run the routing engine
+	 */
+	static function run() {
+		self::$_router->run();
+	}
+
+	/**
 	 * Get app configuration
 	 * @return array
 	 */

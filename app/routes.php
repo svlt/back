@@ -41,5 +41,3 @@ $router->set('ONERROR', function(Base $f3) {
 			$controller->_json(['error' => $f3->get('ERROR.code')] + $f3->get('ERROR'));
 	}
 });
-
-$router->run();

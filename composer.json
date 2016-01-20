@@ -1,6 +1,7 @@
 {
     "require": {
         "bcosca/fatfree": "^3.5",
-        "usmanhalalit/pixie": "^1.0"
+        "usmanhalalit/pixie": "^1.0",
+        "phpunit/phpunit": "4.8.*"
     }
 }
