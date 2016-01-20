@@ -17,7 +17,6 @@ class Security {
 			'expires_at' => date('Y-m-d H:i:s', $expires ?: strtotime('+1 week')),
 			'token' => $hash
 		]);
-		$token->save();
 		return $hash;
 	}
 
