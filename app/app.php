@@ -28,6 +28,7 @@ final class App {
 			'AUTOLOAD' => 'app/',
 			'ESCAPE' => false,
 			'PACKAGE' => 'svlt/back',
+			'CORS.origin' => '*'
 		]);
 
 		// Initialize database connection and query builder
