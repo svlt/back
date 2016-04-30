@@ -44,25 +44,15 @@ class User extends \Controller {
 	 * /u/@user/posts.json
 	 */
 	public function posts($f3, $params) {
-		$query = \QB::table('post')
-				->select(['post.*'])
-				->join('user', 'user.id', '=', 'post.user_id')
-				->where('user.username', $params['username']);
+		$pd = \App::model('post/detail');
+		$posts = $pd->find(['page_username = ?', $params['username']], $_GET + ['limit' => 10]);
 
-		if(isset($_GET['limit']) && intval($_GET['limit'])) {
-			$query->limit(intval($_GET['limit']));
-		}
-		if(isset($_GET['offset']) && intval($_GET['offset'])) {
-			$query->offset(intval($_GET['offset']));
+		$return = [];
+		foreach($posts as $post) {
+			$return[] = $post->cast();
 		}
 
-		$posts = $query->get();
-
-		if(!$posts) {
-			\App::error(404);
-		}
-
-		$this->_json($posts);
+		$this->_json($return);
 	}
 
 	/**

@@ -7,10 +7,21 @@ class Post extends \Controller {
 	/**
 	 * /post.json
 	 * POST a new post
+	 * 
+	 * @todo Allow posting to a buddy's page
+	 * @param \Base $fw
 	 */
-	public function post() {
-		// TODO: Implement authenticated posting
-		\App::error(501);
+	public function post(\Base $fw) {
+		$userId = self::_requireAuth();
+		if($fw->get('POST.user_id') != $userId) {
+			\App::error(403);
+		}
+		$post = \Model\Post::create([
+			'user_id' => $userId,
+			'page_id' => $fw->get('POST.user_id'),
+			'content' => $fw->get('POST.content')
+		]);
+		$this->_json($post->cast());
 	}
 
 	/**

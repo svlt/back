@@ -17,7 +17,7 @@ $router->route('POST /logout.json', 'Controller\\User->logout');
 $router->route('GET /keystore.json', 'Controller\\User->keystore');
 
 // Posts
-$router->route('GET /post.json', 'Controller\\Post->post');
+$router->route('POST /post.json', 'Controller\\Post->post');
 $router->route('GET /post/@id.json', 'Controller\\Post->single');
 
 // Handle errors
