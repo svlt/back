@@ -19,6 +19,7 @@ $router->route('GET /keystore.json', 'Controller\\User->keystore');
 // Posts
 $router->route('POST /post.json', 'Controller\\Post->post');
 $router->route('GET /post/@id.json', 'Controller\\Post->single');
+$router->route('DELETE /post/@id.json', 'Controller\\Post->delete');
 
 // Handle errors
 $router->set('ONERROR', function(Base $f3) {

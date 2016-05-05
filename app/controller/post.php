@@ -5,8 +5,8 @@ namespace Controller;
 class Post extends \Controller {
 
 	/**
-	 * /post.json
-	 * POST a new post
+	 * POST /post.json
+	 * Create a new post
 	 * 
 	 * @todo Allow posting to a buddy's page
 	 * @param \Base $fw
@@ -25,14 +25,39 @@ class Post extends \Controller {
 	}
 
 	/**
-	 * /post/@id.json
+	 * GET /post/@id.json
+	 * Get a single post
+	 * 
+	 * @param \Base $fw
+	 * @param array $params
 	 */
-	public function single() {
-		$post = \App::model('post')->load($request->id);
-		if(!$post->get('id')) {
+	public function single(\Base $fw, array $params) {
+		$userId = self::_requireAuth();
+		$post = \App::model('post')->load($params['id']);
+		if(!$post->id) {
 			\App::error(404);
 		}
 		$this->_json($post->data());
+	}
+
+	/**
+	 * DELETE /post/@id.json
+	 * Delete a post
+	 * 
+	 * @param \Base $fw
+	 * @param array $params
+	 */
+	public function delete(\Base $fw, array $params) {
+		$userId = self::_requireAuth();
+		$post = \App::model('post')->load($params['id']);
+		if(!$post->id) {
+			\App::error(404);
+		}
+		if($post->user_id != $userId && $post->page_id != $userId) {
+			\App::error(403);
+		}
+		$post->erase();
+		$this->_json(["success" => true]);
 	}
 
 }
