@@ -45,7 +45,7 @@ class User extends \Controller {
 	 */
 	public function posts($f3, $params) {
 		$pd = \App::model('post/detail');
-		$posts = $pd->find(['page_username = ?', $params['username']], $_GET + ['limit' => 10]);
+		$posts = $pd->find(['page_username = ?', $params['username']], $_GET + ['limit' => 10, 'order' => 'created_at DESC']);
 
 		$return = [];
 		foreach($posts as $post) {

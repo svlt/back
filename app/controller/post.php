@@ -21,7 +21,8 @@ class Post extends \Controller {
 			'page_id' => $fw->get('POST.user_id'),
 			'content' => $fw->get('POST.content')
 		]);
-		$this->_json($post->cast());
+		$detail = \App::model('post/detail')->load($post->id);
+		$this->_json($detail->cast());
 	}
 
 	/**
@@ -33,7 +34,7 @@ class Post extends \Controller {
 	 */
 	public function single(\Base $fw, array $params) {
 		$userId = self::_requireAuth();
-		$post = \App::model('post')->load($params['id']);
+		$post = \App::model('post/detail')->load($params['id']);
 		if(!$post->id) {
 			\App::error(404);
 		}
